@@ -1,0 +1,35 @@
+<div>
+  <button type="button" (click)="fileInput.click()">Select 2 Images Only </button>
+  <input type="file" multiple hidden #fileInput accept="image/jpeg, image/png" (change)="change($event)" />
+  <!-- 
+    <div>
+        <div *ngFor="let image of urls">
+            <img [src]="image" >
+        </div>        
+    </div> -->
+
+  <div class="images-preview mt-2" *ngIf="urls.length">
+    <div class="row">
+      <div class="col-md-6  " *ngFor="let url of urls; let i = index;">
+        <div class="card mb-1 imgattach">
+          <button type="button" (click)="removePhoto(i)" class="btn btn-danger remove-btn">x</button>
+          <img [src]="url" class="card-img-top" (click)="open(i)" alt="Image Preview">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="urlCurrentImages?.length">
+    <div class="images-preview mt-2" *ngIf="urlCurrentImages?.length">
+      <div class="row">
+        <div class="col-md-6  " *ngFor="let url of urlCurrentImages; let i = index;">
+          <div class="card mb-1 imgattach">
+
+            <img [src]="url" class="card-img-top" (click)="open(i)" alt="Image Preview">
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

@@ -1,0 +1,35 @@
+<div class="container mt-3">
+  
+    <div class="row">
+        <accordion>
+            <accordion-group   heading="Investor Plan " [isOpen]="isFirstOpen">
+                <a *ngFor="let plan of userPlans?.investorList" href="/plan-details/{{plan?.id}}" class="card-columns align-center">
+                    <div  class="card border-primary mb-3 mr-3" style="max-width: 15rem;">
+                        <div class="card-header">Plan Id : #{{plan?.id}}</div>
+                        <div class="card-body text-primary">
+                        <h5 class="card-title">Status : {{plan?.status}}</h5>
+                        <p class="card-text">Created Date : {{plan?.createdDate | date: "dd/MM/yyyy"}}</p>
+                        </div>
+                    </div>
+                </a>
+            </accordion-group>
+            <accordion-group  heading="Loyal Plan"[isOpen]="isFirstOpen">
+                <div class="card-columns align-center">
+                    <a *ngFor="let plan of userPlans?.loyaltyList" href="/plan-details/{{plan?.id}}" class="card-columns align-center">
+                        <div  class="card border-primary mb-3 mr-3" style="max-width: 15rem;">
+                            <div class="card-header">Plan Id : #{{plan?.id}}</div>
+                            <div class="card-body text-primary">
+                            <h5 class="card-title">Status : {{plan?.status}}</h5>
+                            <p class="card-text">Created Date : {{plan?.createdDate | date: "dd/MM/yyyy"}}</p>
+                            </div>
+                        </div>
+                    </a>
+                    <ng-container *ngIf="userPlans?.loyaltyList?.length == 0">
+                            You don't have any Plan Here 
+                    </ng-container>
+                </div>
+            </accordion-group>
+            
+        </accordion>
+    </div>
+</div>

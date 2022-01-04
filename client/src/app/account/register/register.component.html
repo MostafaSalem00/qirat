@@ -1,0 +1,133 @@
+<div class="d-flex justify-content-center mt-4">
+  <div class="col-6">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" style="margin: 20px;">
+      <div class="text-center mb-4">
+        <h1 class="h3 mb-3 font-weight-normal">Register</h1>
+      </div>
+
+      <div class="group-gap">
+        <div class="d-block my-3">
+          <div class="mb-3">
+            <select class="custom-select" (change)="changeCity($event.target)" formControlName="knowAboutUsId">
+              <option value="0" disabled>Please select</option>
+              <option id="markerType" *ngFor="let item of aboutUs ; let i = index" value="{{item?.id}}">{{item.text}}</option>
+            </select>
+            
+            <span class="text-danger" *ngIf="registerForm.get('knowAboutUsId').invalid 
+                        && registerForm.get('knowAboutUsId').touched
+                        && registerForm.get('knowAboutUsId').errors['pattern']">
+              Please Select From here
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <app-text-input formControlName="firstName" [label]="'First Name'"></app-text-input>
+      <app-text-input formControlName="lastName" [label]="'Last Name'"></app-text-input>
+
+      <div class="group-gap">
+        <div class="d-block my-3">
+          <div class="form-label-group">
+            <input type="text" id="dateOfBirth" formControlName="dateOfBirth" placeholder="Date Of Birth" class="form-control"
+              bsDatepicker [bsConfig]="bsConfig" (ngModelChange)="change($event)" >
+            <span class="text-danger" *ngIf="registerForm.get('dateOfBirth').invalid 
+                    && registerForm.get('dateOfBirth').touched
+                    && registerForm.get('dateOfBirth').errors['required']">
+                  Please Select Date of birth
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <app-text-input formControlName="userName" [label]="'User Name'"></app-text-input>
+      <app-text-input formControlName="password" [label]="'Password'" [type]="'password'"></app-text-input>
+      <app-text-input formControlName="confirmPassword" [label]="'confirm Password'" [type]="'password'"></app-text-input>
+      <app-text-input formControlName="occupation" [label]="'Occupation / Source of income'"></app-text-input>
+      <app-text-input formControlName="email" [label]="'Email'"></app-text-input>
+      <app-text-input formControlName="phoneNumber" [label]="'Phone Number'"></app-text-input>
+      <app-text-input formControlName="otherPhoneNumber" [label]="'Other Phone Number'"></app-text-input>
+
+      <div class="form-group">
+        <label class="control-label" style="margin-right: 10px"> Are You American ?</label>
+        <label class="radio-inline mr-3">
+          <input type="radio" [value]="true" formControlName="isAmerican"  > Yes
+        </label>
+        <label class="radio-inline">
+          <input type="radio" [value]="false" formControlName="isAmerican"> No
+        </label>
+        <ng-container *ngIf="registerForm.get('isAmerican').value == true">
+          <app-text-input formControlName="ssn" [label]="'SSN Number'" ></app-text-input>
+        </ng-container>
+
+        <ng-container *ngIf="registerForm.get('isAmerican').value == false">
+          <app-input-image (onImagesSelected)="onImagesSelected($event)"></app-input-image>
+        </ng-container>
+        
+        <!-- <ng-container *ngIf="registerForm.get('isAmerican').value == false">
+          <div class="form-group">
+            <label for="file">File</label>
+            <input 
+                formControlName="w8Passort"
+                id="file" 
+                type="file" 
+                class="form-control"
+                multiple="" 
+                (change)="onFileChange($event)">
+          </div>
+       
+          <div class="images-preview mt-2" *ngIf="images.length">
+            <div class="row">
+              <div class="col-md-6  "  *ngFor="let url of images; let i = index;">
+                <div class="card mb-1 imgattach" >
+                  <button type="button" (click)="removePhoto(i)" class="btn btn-danger remove-btn">x</button>
+                  <img [src]="url" class="card-img-top" (click)="open(i)" alt="Image Preview">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </ng-container> -->
+        
+        
+        <!-- <div class="alert alert-primary" role="alert" *ngIf="registerForm.get('isAmerican').value == true">
+          True is selected
+        </div>
+        <div class="alert alert-primary" role="alert" *ngIf="registerForm.get('isAmerican').value == false">
+          false is selected
+        </div> -->
+      </div>
+
+      <app-text-input formControlName="residentAddress" [label]="'Resident Address'"></app-text-input>
+
+      <app-text-input formControlName="mailingAddress" [label]="'Mailing Address'"></app-text-input>
+
+      <div class="form-group form-check">
+        <input
+          type="checkbox"
+          formControlName="acceptPolicy"
+          class="form-check-input"
+          
+        />
+        <label for="acceptPolicy" class="form-check-label"
+          >I have read and agree to the Terms</label
+        >
+        <!-- <div *ngIf="submitted && f.acceptTerms.errors" class="invalid-feedback">
+          Accept Terms is required
+        </div> -->
+      </div>
+
+      
+
+      <ul class="text-danger list-unstyled" *ngIf="errors">
+        <li *ngFor="let item of errors">
+          {{item}}
+        </li>
+      </ul>
+
+      <!-- <button [disabled]="registerForm.invalid" class="btn btn-lg btn-primary btn-block" type="submit">Register</button> -->
+      <button [disabled]="registerForm.invalid"  class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+
+    </form>
+  </div>
+
+</div>

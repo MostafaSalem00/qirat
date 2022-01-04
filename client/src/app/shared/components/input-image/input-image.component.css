@@ -1,0 +1,17 @@
+.imgattach{
+   
+    position: relative;
+}
+.imgattach button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0 !important;
+    padding: 0;
+    width: 1.6rem;
+    height: 1.6rem;
+}
+.imgattach img{
+    width: 100%;
+    margin: auto;
+}

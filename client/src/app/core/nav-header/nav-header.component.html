@@ -1,0 +1,109 @@
+<nav class="fh5co-nav" role="navigation">
+    <div class="top">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12 text-right">
+            <p class="site">www.Qirat.com</p>
+            <p class="num">Call: +01 123 456 7890</p>
+            <ul class="fh5co-social">
+              <li><a href="#"><i class="icon-facebook2"></i></a></li>
+              <li><a href="#"><i class="icon-twitter2"></i></a></li>
+              <li><a href="#"><i class="icon-dribbble2"></i></a></li>
+              <li><a href="#"><i class="icon-github"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="top-menu">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-2">
+            <div id="fh5co-logo"><a href="index.html"><i class="icon-study"></i><span>Qirat</span></a></div>
+          </div>
+
+          <!-- Normal User Menu -->
+          <ng-container *ngIf="(isAdmin$ | async) == false">
+            <div class="col-xs-10 text-right menu-1 flexCSS">
+              <ul>
+                <li><a href="index.html">Home</a></li>
+
+                <ng-container *ngIf="(currentUser$ | async)">
+                  <li ><a routerLink="/plan" routerLinkActive="active">New Plan</a></li>
+                  <li><a routerLink="/my-plans" routerLinkActive="active" class="active">My Plans</a></li>
+                </ng-container>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#">FAQs</a></li>  
+                
+                <ng-container *ngIf="(currentUser$ | async) === null">
+                  <li class="btn-cta mr-2"><a routerLink="/account/login"><span>Login</span></a></li>
+                  <li class="btn-cta"><a routerLink="/account/register"><span>Sign-Up</span></a></li>
+                </ng-container>              
+              </ul>      
+              <ng-container *ngIf="currentUser$ | async">
+                <div class="col-xs-2 text-right menu-1">
+                  
+                    <div class="dropdown ml-3 mr-5" dropdown>
+                      <a class="dropdown-toggle" style="cursor: pointer;" dropdownToggle > 
+                        <strong>Welcome {{(currentUser$ | async).userName}}</strong>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer;" *dropdownMenu>
+                        <!-- <a class="dropdown-item d-flex align-items-centerv py-2">
+                          <i class="fa fa-shopping-cart mr-3"></i> View Basket
+                        </a>
+                        <a class="dropdown-item d-flex align-items-centerv py-2">
+                          <i class="fa fa-history mr-3"></i> View Orders
+                        </a> 
+                        <div class="dropdown-divider"></div>-->
+                        <a (click)="logOut();" class="dropdown-item d-flex align-items-centerv py-2">
+                          <i class="fa fa-sign-out mr-3"></i> Logout
+                        </a>
+                      </div>
+                    </div>
+                </div>
+              </ng-container>        
+            </div>
+          </ng-container>
+
+          <!-- Admin User Menu -->
+          <ng-container *ngIf="isAdmin$ | async">
+            <div class="col-xs-10 text-center menu-1">
+              <ul>
+                <li><a routerLink="/admin/home" routerLinkActive="active-link">Home</a></li>
+                <li><a routerLink="/admin/users" routerLinkActive="active-link">Members</a></li>
+                
+              </ul>
+              <ng-container *ngIf="currentUser$ | async">
+                <div class="col-xs-2 text-right menu-1">
+                  
+                    <div class="dropdown ml-3 mr-5" dropdown>
+                      <a class="dropdown-toggle" style="cursor: pointer;" dropdownToggle > 
+                        <strong>Welcome {{(currentUser$ | async).userName}}</strong>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer;" *dropdownMenu>
+                        <!-- <a class="dropdown-item d-flex align-items-centerv py-2">
+                          <i class="fa fa-shopping-cart mr-3"></i> View Basket
+                        </a>
+                        <a class="dropdown-item d-flex align-items-centerv py-2">
+                          <i class="fa fa-history mr-3"></i> View Orders
+                        </a> 
+                        <div class="dropdown-divider"></div>-->
+                        <a (click)="logOut();" class="dropdown-item d-flex align-items-centerv py-2">
+                          <i class="fa fa-sign-out mr-3"></i> Logout
+                        </a>
+                      </div>
+                    </div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+
+
+         
+
+        </div>
+  
+      </div>
+    </div>
+  </nav>
+  

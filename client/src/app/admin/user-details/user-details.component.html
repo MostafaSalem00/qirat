@@ -1,0 +1,96 @@
+<div class="d-flex justify-content-center mt-4">
+  <div class="col-6">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="form-signin" style="margin: 20px;">
+      <div class="text-center mb-4">
+        <h1 class="h3 mb-3 font-weight-normal">Register</h1>
+      </div>
+
+      <div class="group-gap">
+        <div class="d-block my-3">
+          <div class="mb-3">
+            <select class="custom-select" formControlName="knowAboutUsId">
+              <option value="0" disabled>Please select</option>
+              <option id="markerType" *ngFor="let item of aboutUs ; let i = index" [value]="item?.id">{{item.text}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-label-group">
+
+        <input formControlName="firstName" id="inputfirstName" class="form-control" placeholder="firstName">
+        <label for="First Name">First Name</label>
+      </div>
+      <div class="form-label-group">
+        <input formControlName="lastName" id="inputlastName" class="form-control" placeholder="lastName">
+        <label for="Last Name">Last Name</label>
+      </div>
+
+      <div class="group-gap">
+        <div class="d-block my-3">
+          <div class="form-label-group">
+            <input type="text" id="dateOfBirth" formControlName="dateOfBirth" placeholder="Date Of Birth"
+              class="form-control">
+            <label for="Date Of Birth">Date Of Birth</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-label-group">
+        <input formControlName="userName" id="inputuserName" class="form-control" placeholder="userName">
+        <label for="User Name">User Name</label>
+      </div>
+      <!-- <div class="form-label-group">
+            <input formControlName="occupation"  id="inputoccupation" class="form-control" placeholder="occupation" >
+        </div> -->
+      <div class="form-label-group">
+        <input formControlName="email" id="inputemail" class="form-control" placeholder="email">
+        <label for="Email">Email</label>
+      </div>
+      <div class="form-label-group">
+        <input formControlName="phoneNumber" id="inputphoneNumber" class="form-control" placeholder="phoneNumber">
+        <label for="Phone Number">Phone Number</label>
+      </div>
+      <div class="form-label-group">
+        <input formControlName="otherPhone" id="inputotherPhone" class="form-control" placeholder="otherPhone">
+        <label for="Other Phone Number">Other Phone Number</label>
+      </div>
+
+
+      <div class="form-group">
+        <label class="control-label" style="margin-right: 10px"> Are You American ?</label>
+        <label class="radio-inline">
+          <input type="radio" [value]="true" formControlName="isAmerican"> Yes
+        </label>
+        <label class="radio-inline">
+          <input type="radio" [value]="false" formControlName="isAmerican"> No
+        </label>
+      </div>
+
+      <ng-container *ngIf="userForm.get('isAmerican').value == false">
+        <app-input-image [urlCurrentImages]="userForm.get('attachments').value"></app-input-image>
+      </ng-container>
+
+      <div class="form-label-group">
+        <input formControlName="residentAddress" id="inputresidentAddress" class="form-control"
+          placeholder="residentAddress">
+        <label for="Resident Address">Resident Address</label>
+      </div>
+      <div class="form-label-group">
+        <input formControlName="mailingAddress" id="inputmailingAddress" class="form-control"
+          placeholder="mailingAddress">
+        <label for="Mailing Address">Mailing Address</label>
+      </div>
+
+      <div class="form-group form-check">
+        <input type="checkbox" formControlName="acceptPolicy" class="form-check-input" />
+        <label for="acceptPolicy" class="form-check-label">I have read and agree to the Terms</label>
+
+      </div>
+
+      <!-- <button [disabled]="registerForm.invalid" class="btn btn-lg btn-primary btn-block" type="submit">Register</button> -->
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Accept</button>
+
+    </form>
+  </div>
+
+</div>

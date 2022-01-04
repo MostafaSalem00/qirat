@@ -1,0 +1,21 @@
+1- Create solution with 3 project 
+2- create angular project and use the api
+3- DB Switch between sqlite and sqlserver ( by delete migrations )
+4- How to deploy
+5- SSL
+6- Seeding data when db created ( at program class migrate db as list in course context.Database.Migrate()  )
+4- 
+
+Login Module : 
+1- Upload images component
+2- Invitations
+3- Validations
+
+
+Create New Plan :
+1- A request to get metl should be take place
+2- Add OrederItem Class to Plan Tabel ( Done )
+3- Show the Total Coast ( depeneding of equation and variables coming from server ) >>> A configuration call will be requested at first load of our website
+
+
+
