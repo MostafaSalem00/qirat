@@ -7,7 +7,7 @@ import { HomeComponent } from './home/home.component';
 import { MyPlansComponent } from './plan/my-plans/my-plans.component';
 import { PlanDetailsComponent } from './plan/plan-details/plan-details.component';
 import { PlanOrderComponent } from './plan/plan-order/plan-order.component';
-import { PlanSummaryComponent } from './plan/plan-summary.component';
+import { PlanSummaryComponent } from './plan/plan-summary/plan-summary.component';
 import { PlanComponent } from './plan/plan.component';
 import { Role } from './shared/models/Role';
 import { ShopComponent } from './shop/shop.component';

@@ -8,13 +8,20 @@ import { MyPlansComponent } from './my-plans/my-plans.component';
 import { PlanOrderComponent } from './plan-order/plan-order.component';
 import { InvestorPlanComponent } from './investor-plan/investor-plan.component';
 import { LoyalityPlanComponent } from './loyality-plan/loyality-plan.component';
-import { PlanSummaryComponent } from './plan-summary.component';
+import { PlanSummaryComponent } from './plan-summary/plan-summary.component';
+
 
 
 
 @NgModule({
   declarations: [    
-    PlanComponent, PlanDetailsComponent, MyPlansComponent, PlanOrderComponent, InvestorPlanComponent, LoyalityPlanComponent, PlanSummaryComponent
+    PlanComponent,
+     PlanDetailsComponent,
+      MyPlansComponent,
+       PlanOrderComponent,
+        InvestorPlanComponent, 
+        LoyalityPlanComponent,
+        PlanSummaryComponent
   ],
   imports: [
     CommonModule,    

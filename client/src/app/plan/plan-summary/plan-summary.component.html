@@ -1,0 +1,105 @@
+<div class="container">
+    <div class="row">
+        <h4>Plan Id : # {{plan?.id}}</h4>
+        <h4>Plan Type : {{plan?.planType?.name}} </h4>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">First Year</h4>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title pricing-card-title">Metal Type <small class="text-muted">{{metalName}}</small>
+                    </h2>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Start Date : {{plan?.createdDate | date: "dd/MM/yyyy"}} </li>
+                        <!-- <li>End Date : {{plan?.createdDate | date: "dd/MM/yyyy"}} </li> -->
+                        <li>Quantit : {{plan?.orderItems[0]?.quantity}} </li>
+                        <li>Total Price : {{plan?.orderItems[0]?.totalPrice}} </li>
+                    </ul>
+
+                </div>
+                <ng-container *ngIf="plan?.orderItems[0]?.orderStatus == 'None'">
+                    <div class="card-footer">
+                        <a href="/plan-order/{{plan?.id}}">
+                            <Button class="btn btn-primary">Make Order</Button>
+                        </a>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="plan?.orderItems[0]?.orderStatus == 'Pending'">
+                    <div class="card-footer">
+                        <a href="/plan-summary/{{plan?.id}}">
+                            <Button class="btn btn-primary">Order Summary</Button>
+                        </a>
+                    </div>
+                </ng-container>
+
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Second Year</h4>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title pricing-card-title">Metal Type <small class="text-muted">{{metalName}}</small>
+                    </h2>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Start Date : {{plan?.orderItems[1]?.createdDate | date: "dd/MM/yyyy"}} </li>
+                        <!-- <li>End Date : {{plan?.orderItems[1]?.createdDate | date: "dd/MM/yyyy"}} </li> -->
+                        <li>Quantit : {{plan?.orderItems[1]?.quantity}} </li>
+                        <li>Total Price : {{plan?.orderItems[1]?.totalPrice}} </li>
+                    </ul>
+
+                </div>
+                <ng-container *ngIf="plan?.orderItems[1]?.orderStatus == 'None'">
+                    <div class="card-footer">
+                        <a href="/plan-order/{{plan?.id}}">
+                            <Button class="btn btn-primary">Make Order</Button>
+                        </a>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="plan?.orderItems[1]?.orderStatus == 'Pending'">
+                    <div class="card-footer">
+                        <a href="/plan-summary/{{plan?.id}}">
+                            <Button class="btn btn-primary">Order Summary</Button>
+                        </a>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Third Year</h4>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title pricing-card-title">Metal Type <small class="text-muted">{{metalName}}</small>
+                    </h2>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Start Date : {{plan?.orderItems[2]?.createdDate | date: "dd/MM/yyyy"}} </li>
+                        <!-- <li>End Date : {{plan?.orderItems[2]?.createdDate | date: "dd/MM/yyyy"}} </li> -->
+                        <li>Quantit : {{plan?.orderItems[2]?.quantity}} </li>
+                        <li>Total Price : {{plan?.orderItems[2]?.totalPrice}} </li>
+                    </ul>
+
+                </div>
+                <ng-container *ngIf="plan?.orderItems[2]?.orderStatus == 'None'">
+                    <div class="card-footer">
+                        <a href="/plan-order/{{plan?.id}}">
+                            <Button class="btn btn-primary">Make Order</Button>
+                        </a>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="plan?.orderItems[2]?.orderStatus == 'Pending'">
+                    <div class="card-footer">
+                        <a href="/plan-summary/{{plan?.id}}">
+                            <Button class="btn btn-primary">Order Summary</Button>
+                        </a>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+</div>
