@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using API.Dtos;
 using API.Errors;
 using API.Extensions;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
@@ -25,9 +28,11 @@ namespace API.Controllers
         private readonly ITokenService _tokenService;
         private readonly StoreContext _context;
         private readonly IFileService _fileService;
+
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService,
                  StoreContext context, IFileService fileService)
         {
+            //_mailService = mailService;
             _context = context;
             _tokenService = tokenService;
             _signInManager = signInManager;
@@ -42,6 +47,8 @@ namespace API.Controllers
             var user = await _userManager.FindByEmailFromClaimPrincipleAsync(HttpContext.User);
 
             // check if user is null first 
+            if (user == null)
+                return null;
 
             var roles = await _userManager.GetRolesAsync(user);
 
@@ -149,8 +156,16 @@ namespace API.Controllers
 
             if (!result.Succeeded) return BadRequest(new ApiValidationErrorResponse() { Errors = result.Errors.Select(e => e.Description) });
 
+            await _signInManager.SignInAsync(user, isPersistent: false);
+
             if (result.Succeeded)
                 await _userManager.AddToRoleAsync(user, "Member");
+
+            if (!user.IsAmerican)
+            {
+
+            }
+
 
             return new UserDto
             {
@@ -160,6 +175,22 @@ namespace API.Controllers
                 Role = new string[] { "Member" }
             };
 
+        }
+
+        [HttpGet("EmailConfirmation")]
+        public async Task<IActionResult> EmailConfirmation(string token, string email)
+        {
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return BadRequest(new ApiResponse(400, "Invalid Email Confirmation Request"));
+
+            var confirmResult = await _userManager.ConfirmEmailAsync(user, token);
+
+            if (!confirmResult.Succeeded)
+                return BadRequest(new ApiResponse(400, "Invalid Email Confirmation Request"));
+
+            return Ok();
         }
 
 

@@ -3,7 +3,7 @@ import { IMetal } from "./metal";
 export interface IOrderItem
 {
     id : number;
-    metal : IMetal;
+    // metal : IMetal;
     metalId: number;
     createdDate: Date;
     metalTypeId: number;

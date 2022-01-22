@@ -35,6 +35,7 @@ export class RegisterComponent implements OnInit {
     };
     this.createRegisterForm();
     this.getAboutUsDropdown();
+    this.setIsAmericanValidators();
   }
 
   createRegisterForm(){
@@ -51,13 +52,10 @@ export class RegisterComponent implements OnInit {
       email: [null, [Validators.required , Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')]],
       phoneNumber: [null, [Validators.required]],
       otherPhoneNumber: [null, [Validators.required]],
-      isAmerican: [false, [Validators.required]],
-      // ssn:[null,[this.conditionalValidator(() => this.registerForm.get('isAmerican').value == true, Validators.required)]],
-      ssn:[null,[this.conditionalValidator(() => this.registerForm.get('isAmerican').value == true, Validators.required)]],
+      isAmerican: [null, [Validators.required]],
+      ssn:[null],
       //w8Passort:[null],
-      // files: [null,[this.conditionalValidator(() => this.registerForm.get('isAmerican').value == false, Validators.required)]],
-      files: [null],
-      
+      files: [null],      
       residentAddress : [null, [Validators.required]],
       mailingAddress : [null , [Validators.required]],      
       acceptPolicy: [null, Validators.requiredTrue]
@@ -68,27 +66,52 @@ export class RegisterComponent implements OnInit {
     return g.get('password').value === g.get('confirmPassword').value ? null : "Not Valid";
   }
 
-  conditionalValidator(predicate, validator) {
-    console.log('custome val enter')
-    return (formControl => {
-      if (!formControl.parent) {
-        return null;
-      }
-      if (predicate) {
-        return validator(formControl); 
-      }
-      return null;
-    })
+  validateUserNameNotTaken(): AsyncValidatorFn{    
+    return control => {
+      return timer(500).pipe(
+        switchMap(() => {
+          if(!control.value){
+            return of(null);
+          }            
+          return this.accountService.checkUserNameExists(control.value).pipe(
+            
+            map(res => {
+              console.log(res);
+              return res ? {userNameExists: true} : null;
+            })
+          );
+        })
+      );
+    }
   }
 
-  myconditionalValidator(condition: (() => boolean), validator: ValidatorFn): ValidatorFn {
-    return (control: AbstractControl): {[key: string]: any} => {
-      if (! condition()) {
-        return null;
-      }
-      return validator(control);
-    }
-}
+  setIsAmericanValidators(){
+    const ssnControl = this.registerForm.get('ssn');
+    const filesControl = this.registerForm.get('files');
+    
+
+    this.registerForm.get('isAmerican').valueChanges
+      .subscribe(isAmerican => {
+
+        if (isAmerican === true) {
+          console.log('isAmerican = true');
+          ssnControl.setValidators([Validators.required]);
+          filesControl.setValidators(null);          
+        }
+
+        if (isAmerican === false) {
+          console.log('isAmerican = false');
+          ssnControl.setValidators(null);
+          //filesControl.setValidators([Validators.required]);
+          
+        }
+
+        ssnControl.updateValueAndValidity();
+        filesControl.updateValueAndValidity();
+        
+      });  
+  }
+
 
   getAboutUsDropdown() {
     this.accountService.getAboutUsData().subscribe(response => {
@@ -110,24 +133,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  validateUserNameNotTaken(): AsyncValidatorFn{    
-    return control => {
-      return timer(500).pipe(
-        switchMap(() => {
-          if(!control.value){
-            return of(null);
-          }            
-          return this.accountService.checkUserNameExists(control.value).pipe(
-            
-            map(res => {
-              console.log(res);
-              return res ? {userNameExists: true} : null;
-            })
-          );
-        })
-      );
-    }
-  }
+  
 
   change(date: Date){
     console.log(date);

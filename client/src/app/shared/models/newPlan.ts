@@ -6,10 +6,10 @@ export interface INewPlan
     planTypeId: number;
     metalTypeId: number;
     metalTypeName: string;
-    metalPrice: number;
+    // metalPrice: number;
     amount: number;
     measurementType: string;
-    metal: IMetal;
-    totalPrice: number;
+    // metal: IMetal;
+    // totalPrice: number;
     acceptTerms: boolean;
 }

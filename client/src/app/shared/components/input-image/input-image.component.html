@@ -1,6 +1,9 @@
 <div>
-  <button type="button" (click)="fileInput.click()">Select 2 Images Only </button>
-  <input type="file" multiple hidden #fileInput accept="image/jpeg, image/png" (change)="change($event)" />
+  <ng-container *ngIf="urlCurrentImages === undefined">
+    <button type="button" (click)="fileInput.click()">Select 2 Images Only </button>
+    <input type="file" multiple hidden #fileInput accept="image/jpeg, image/png" (change)="change($event)" />
+  </ng-container>
+
   <!-- 
     <div>
         <div *ngFor="let image of urls">

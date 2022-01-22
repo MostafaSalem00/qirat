@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20220107202510_UpdatesAtPlanAndOrderItem")]
-    partial class UpdatesAtPlanAndOrderItem
+    [Migration("20220110092140_UpdatePlanInvitationModel")]
+    partial class UpdatePlanInvitationModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,21 +20,6 @@ namespace Infrastructure.Data.Migrations
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Core.Entities.AlternativeMetal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AlternativeMetals");
-                });
 
             modelBuilder.Entity("Core.Entities.AppUser", b =>
                 {
@@ -209,6 +194,24 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Metals");
                 });
 
+            modelBuilder.Entity("Core.Entities.MetalType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AlternativeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MetalTypes");
+                });
+
             modelBuilder.Entity("Core.Entities.OrderItem", b =>
                 {
                     b.Property<int>("Id")
@@ -292,14 +295,8 @@ namespace Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("Expiration")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Invitee")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Inviter")
                         .HasColumnType("nvarchar(max)");
@@ -309,6 +306,9 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("ToEmail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");

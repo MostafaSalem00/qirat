@@ -19,11 +19,11 @@ namespace API.Controllers
         // private readonly IPlanRepository _repo;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        
+
         private readonly UserManager<AppUser> _userManager;
         public PlansController(IUnitOfWork unitOfWork, UserManager<AppUser> userManager, IMapper mapper)
         {
-            
+
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _mapper = mapper;
@@ -39,8 +39,8 @@ namespace API.Controllers
         public async Task<ActionResult> PostNewPlan(NewPlanDto plan)
         {
             var user = await _userManager.FindUserByClaimPrincipleAsync(HttpContext.User);
-           
-            var planCreated = await _unitOfWork.Plans.CreateNewPlanAsync(plan.Metals ,user.Id, user.Id ,plan.PlanTypeId, plan.MetalTypeId, plan.MetalTypeName, plan.MetalPrice, plan.MeasurementType, plan.Amount, plan.TotalPrice, plan.AcceptTerms, plan.Status);
+
+            var planCreated = await _unitOfWork.Plans.CreateNewPlanAsync(user.Id, user.Id, plan.PlanTypeId, plan.MetalTypeId, plan.MetalTypeName, 0, plan.MeasurementType, plan.Amount, plan.AcceptTerms, plan.Status);
 
             var result = await _unitOfWork.complete();
 
@@ -49,12 +49,22 @@ namespace API.Controllers
             return Ok(planCreated);
         }
 
+        [HttpGet("PlanSummary/{id}")]
+        public async Task<ActionResult> GetPlanSummaryById(int id)
+        {
+            var planSummary = await _unitOfWork.Plans.GetSummaryPlanById(id);
+            var ret = _mapper.Map<PlanForSummaryReponseDTO>(planSummary);
+            return Ok(ret);
+        }
+
+
+
         [HttpPost("NewOrderPlan")]
         public async Task<ActionResult> PostNewOrder(NewPlanDto plan)
         {
             var user = await _userManager.FindUserByClaimPrincipleAsync(HttpContext.User);
-           
-            var planCreated = await _unitOfWork.Plans.CreteOrderPlanAsync(plan.Id, plan.Metals ,user.Id, user.Id ,plan.PlanTypeId, plan.MetalTypeId, plan.MetalTypeName, plan.MetalPrice, plan.MeasurementType, plan.Amount, plan.TotalPrice, plan.AcceptTerms, plan.Status);
+
+            var planCreated = await _unitOfWork.Plans.CreteOrderPlanAsync(plan.Id, user.Id, user.Id, plan.PlanTypeId, plan.MetalTypeId, plan.MetalTypeName, 0, plan.MeasurementType, plan.Amount, plan.AcceptTerms, plan.Status);
 
             var result = await _unitOfWork.complete();
 
@@ -71,17 +81,17 @@ namespace API.Controllers
         {
             var user = await _userManager.FindUserByClaimPrincipleAsync(HttpContext.User);
 
-            var plan = await _unitOfWork.Plans.GetPlanByIdAsync(id);            
+            var plan = await _unitOfWork.Plans.GetPlanByIdAsync(id);
 
             if (plan == null) return BadRequest(new ApiResponse(404));
 
-            if(user.Id != plan.BuyerId) return BadRequest(new ApiResponse(404));
+            if (user.Id != plan.BuyerId) return BadRequest(new ApiResponse(404));
 
-           
+
             List<PlanInvitation> planInivitations = new List<PlanInvitation>();
-            if(plan.PlanTypeId == 2)
+            if (plan.PlanTypeId == 2)
             {
-                planInivitations = await _unitOfWork.Plans.GetPlanInvitationByIdAsync(id,user.Id);
+                planInivitations = await _unitOfWork.Plans.GetPlanInvitationByIdAsync(id, user.Id);
             }
 
             PlanOrderDto planOrder = new PlanOrderDto

@@ -4,10 +4,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Config
 {
-    public class OrderItemConfiguration: IEntityTypeConfiguration<OrderItem>
+    public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
     {
         public void Configure(EntityTypeBuilder<OrderItem> builder)
         {
+            // builder
+            // .Property(e => e.MetalId)
+            // .HasOptional<Metal>(m => m.)
+            // .WithOptionalPrincipal();
 
             builder
                 .Property(e => e.MeasurementType)

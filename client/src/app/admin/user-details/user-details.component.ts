@@ -3,9 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
 import { AccountService } from 'src/app/account/account.service';
+import { IAttachment } from 'src/app/shared/models/attachment';
 import { IKnowAboutUs } from 'src/app/shared/models/IKnowAboutUs';
 import { IMember } from 'src/app/shared/models/member';
 import { UserService } from '../users/user.service';
+import { UserDetailsService } from './user-details.service';
 
 @Component({
   selector: 'app-user-details',
@@ -15,11 +17,13 @@ import { UserService } from '../users/user.service';
 export class UserDetailsComponent implements OnInit {
   userId: string;
   userMember: IMember;
+  attachmentList: string[];
   bsConfig: Partial<BsDatepickerConfig>;
   userForm : FormGroup;
   aboutUs: IKnowAboutUs[] ;
+  attachemntSource : any[]
   
-  constructor(private fb: FormBuilder,private accountService: AccountService,private activatedRoute: ActivatedRoute, private userService: UserService) { }
+  constructor(private fb: FormBuilder,private userdetailsService: UserDetailsService,private activatedRoute: ActivatedRoute, private userService: UserService) { }
 
   ngOnInit(): void {
     this.userId = this.activatedRoute.snapshot.paramMap.get('id');
@@ -40,6 +44,11 @@ export class UserDetailsComponent implements OnInit {
     this.userService.loadMemberUserByIdAsync(this.userId).subscribe(response => {
       console.log(response);      
       this.userMember = response;
+      this.attachemntSource = response.attachment.map(a => {
+        return { src: a.path };
+      });
+      this.attachmentList = response.attachment.map(a => a.path);
+      console.log(this.attachmentList);    
       this.updateUserFormVields();
     }, error => {
       console.log(error);
@@ -86,11 +95,12 @@ export class UserDetailsComponent implements OnInit {
       residentAddress : this.userMember.residentAddress,
       mailingAddress : this.userMember.mailingAddress,
       acceptPolicy: this.userMember.acceptPolicy,
+      
    });
   }
 
   getAboutUsDropdown() {
-    this.accountService.getAboutUsData().subscribe(response => {
+    this.userdetailsService.getAboutUsData().subscribe(response => {
       console.log(response);
       this.aboutUs = response;
       console.log(this.aboutUs);
@@ -99,18 +109,28 @@ export class UserDetailsComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit($event: Event) {
+    var activeButton = document.activeElement.id;
 
-    // this.userForm.patchValue({dateOfBirth:this.myDateValue});
-    // this.userForm.patchValue({knowAboutUsId:this.myKnowAboutIdValue});
-    var user = Object.assign({},this.userForm.value);
-    console.log(user);
-    this.accountService.register(user).subscribe(response => {
-      console.log(response);
-      //this.router.navigateByUrl('/shop');
-    }, error => {
+    if (activeButton == "submit-accept") {
+      console.log(this.userForm.value);
+      this.userdetailsService.acceptUser(this.userForm.value).subscribe((data) => {
+
+      });
+    }
+    if (activeButton == "submit-reject") {
+      this.userdetailsService.rejectUser(this.userForm).subscribe((data) => {
+
+      });
+    }
+    // var user = Object.assign({},this.userForm.value);
+    // console.log(user);
+    // this.accountService.register(user).subscribe(response => {
+    //   console.log(response);
+    //   //this.router.navigateByUrl('/shop');
+    // }, error => {
       
-    });
+    // });
   }
 
 }

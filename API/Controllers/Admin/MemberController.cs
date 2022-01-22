@@ -1,12 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using API.Dtos;
 using Core.Entities;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers.Admin
@@ -14,13 +19,14 @@ namespace API.Controllers.Admin
     [Route("api/admin/[controller]")]
     public class MemberController : BaseAdminApiController
     {
+        private readonly IMailService _mailService;
         private readonly StoreContext _context;
         private readonly UserManager<AppUser> _userManager;
-        public MemberController(UserManager<AppUser> userManager, StoreContext context)
+        public MemberController(UserManager<AppUser> userManager, StoreContext context, IMailService mailService)
         {
+            _mailService = mailService;
             _userManager = userManager;
             _context = context;
-
         }
 
         [Authorize]
@@ -63,6 +69,46 @@ namespace API.Controllers.Admin
             };
 
             return Ok(userDto);
+        }
+
+        [HttpPost("AcceptUser")]
+        public async Task<ActionResult> AcceptUser(AppUser user)
+        {
+            if (!user.IsAmerican)
+            {
+                var fetchedUser = await _userManager.FindByEmailAsync(user.Email);
+
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(fetchedUser);
+
+                var param = new Dictionary<string, string>
+                {
+                    {"token", token },
+                    {"email", user.Email }
+                };
+                var callback = QueryHelpers.AddQueryString("https://localhost:4200/account/emailconfirmation", param);
+
+                var request = new VerificationRequest() { ToEmail = user.Email, UserName = user.UserName, HostUrl = callback };
+
+                await _mailService.SendVerificationEmailAsync(request);
+            }
+            return Ok(user);
+        }
+
+        [HttpPost("RejectUser")]
+        public async Task<ActionResult> RejectUser(AppUser user)
+        {
+            // if (!user.IsAmerican)
+            // {
+            //     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            //     var param = new Dictionary<string, string>
+            //     {
+            //         {"token", token },
+            //         {"email", user.Email }
+            //     };
+            //     var callback = QueryHelpers.AddQueryString("http://localhost:4200/account/emailconfirmation", param);
+            //     await _mailService.SendVerificationEmailAsync(new VerificationRequest { ToEmail = user.Email, UserName = user.UserName, HostUrl = callback });
+            // }
+            return Ok(user);
         }
     }
 }

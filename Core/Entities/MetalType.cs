@@ -5,6 +5,6 @@ namespace Core.Entities
 
         public string Name { get; set; }
 
-        public double Price { get; set; }
+        public int AlternativeId { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 export enum MetalEnum {
-    XAG = 'Gold',
-    XAU = 'Sliver', 
+    XAG = 'Sliver',
+    XAU = 'Gold', 
     XPD = 'Platinum',
     XPT = 'Plad',
 }

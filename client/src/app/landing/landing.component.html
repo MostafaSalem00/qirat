@@ -1,0 +1,36 @@
+<div id="page">
+
+
+    <div id="fh5co-about">
+
+        <div class="container" style="display: flex;
+        justify-content: center;
+        align-items: center;">
+            <div class="col-md-6 animate-box">
+                <span>About Us</span>
+                <h2>Welcome to Our Precious World</h2>
+                <p>We are a US Precious Metals Investment Company, Retail Services Provider “Buy, Custody and Liquidate”
+                </p>
+                <p>QIRAT LLC Formed at Delaware on 2017, To Develop The Precious Metals Sales Lifecycle.</p>
+                <p>Our Operating Systems Managing Commercial Undertakings To Enhance Precious Metals Investment Returns.
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div id="chartdiv"></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="container">
+            <marquee behavior="slide" direction="left">
+                <h4 *ngFor="let item of (recentMetalList$ | async)"> {{item.Title}}/USD:
+                    {{1/item?.Value | number : '1.2-2'}}</h4>
+                <!-- <h4 id="Gold" class="yallow">Gold/USD: </h4>
+                <h4 id="Platinum" class="gray">Platinum/USD: </h4>
+                <h4 id="Palladuim" class="black"> Palladuim/USD: </h4>
+                <h4 id="Silver" class="silver"> Silver/USD: </h4> -->
+            </marquee>
+        </div>
+    </div>
+</div>

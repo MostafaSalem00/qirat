@@ -142,6 +142,32 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Attachments");
                 });
 
+            modelBuilder.Entity("Core.Entities.InvitationInteraction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ActorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InteractionStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlanInvitationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanInvitationId");
+
+                    b.ToTable("InvitationInteractions");
+                });
+
             modelBuilder.Entity("Core.Entities.KnowAboutUs", b =>
                 {
                     b.Property<int>("Id")
@@ -163,6 +189,9 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OrderItemId")
+                        .HasColumnType("int");
 
                     b.Property<int>("RatesId")
                         .HasColumnType("int");
@@ -196,11 +225,11 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AlternativeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -214,13 +243,13 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ClientSecret")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("MeasurementType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MetalId")
                         .HasColumnType("int");
 
                     b.Property<int>("MetalTypeId")
@@ -231,6 +260,9 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
+
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PlanId")
                         .HasColumnType("int");
@@ -245,8 +277,6 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MetalId");
 
                     b.HasIndex("PlanId");
 
@@ -295,14 +325,8 @@ namespace Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("Expiration")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Invitee")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Inviter")
                         .HasColumnType("nvarchar(max)");
@@ -312,6 +336,9 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("ToEmail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
@@ -585,6 +612,15 @@ namespace Infrastructure.Data.Migrations
                         .HasForeignKey("AppUserId");
                 });
 
+            modelBuilder.Entity("Core.Entities.InvitationInteraction", b =>
+                {
+                    b.HasOne("Core.Entities.PlanInvitation", "PlanInvitation")
+                        .WithMany()
+                        .HasForeignKey("PlanInvitationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Core.Entities.Metal", b =>
                 {
                     b.HasOne("Core.Entities.Rates", "Rates")
@@ -596,12 +632,6 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.OrderItem", b =>
                 {
-                    b.HasOne("Core.Entities.Metal", "Metal")
-                        .WithMany()
-                        .HasForeignKey("MetalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Core.Entities.Plan", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("PlanId");

@@ -7,7 +7,7 @@ namespace Core.Interfaces
     public interface IMetalRepository
     {
         Task<Metal> GetMetalAsync();
-
+        Task<List<MetalType>> GetMetalTypesAsync();
         Task<List<MetalType>> GetMetalAfterShapping();
         Task<Metal> GetMetalByIdAsync(int id);
     }

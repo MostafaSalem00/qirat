@@ -13,6 +13,8 @@ import { LoadingInterceptor } from './core/interceptor/loading.interceptor';
 import { PlanModule } from './plan/plan.module';
 import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
 import { ErrorInterceptor } from './core/interceptor/error.interceptor';
+import { LandingModule } from './landing/landing.module';
+import { EncodeHttpParamsInterceptor } from './core/interceptor/EncodeHttpParamsInterceptor';
 
 @NgModule({
   declarations: [
@@ -27,12 +29,18 @@ import { ErrorInterceptor } from './core/interceptor/error.interceptor';
     ShopModule,
     PlanModule,
     HomeModule,
+    LandingModule,
     NgxSpinnerModule
   ],
   providers: [
     {provide : HTTP_INTERCEPTORS , useClass: ErrorInterceptor , multi : true},
     {provide : HTTP_INTERCEPTORS , useClass: LoadingInterceptor , multi : true},
-    {provide : HTTP_INTERCEPTORS , useClass: JwtInterceptor , multi : true}
+    {provide : HTTP_INTERCEPTORS , useClass: JwtInterceptor , multi : true},
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: EncodeHttpParamsInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

@@ -32,6 +32,12 @@ namespace API.Controllers
             return Ok(metal);
         }
 
+        [HttpGet("MetalTypes")]
+        public async Task<ActionResult<List<MetalType>>> GetMetalTypes()
+        {
+            return await _unitOfWork.Metals.GetMetalTypesAsync();
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Metal>> GetMetal(int id)
         {

@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Entities
 {
@@ -8,9 +10,8 @@ namespace Core.Entities
         {
         }
 
-        public OrderItem(Metal metal,int metalTypeId,string metalTypeName, double price, int quantity, double totalPrice, MeasurementType measurementType , OrderStatus orderStatus)
+        public OrderItem(int metalTypeId, string metalTypeName, double price, int quantity, double totalPrice, MeasurementType measurementType, OrderStatus orderStatus)
         {
-            Metal = metal;
             CreatedDate = DateTime.Now;
             MetalTypeId = metalTypeId;
             MetalTypeName = metalTypeName;
@@ -20,17 +21,18 @@ namespace Core.Entities
             MeasurementType = measurementType;
             OrderStatus = orderStatus;
         }
-
-        public int MetalId { get; set; }
-        public Metal Metal { get; set; }
+        // public int MetalId { get; set; }
+        // public Metal Metal { get; set; }
         public DateTime CreatedDate { get; set; }
         public int MetalTypeId { get; set; }
         public string MetalTypeName { get; set; }
         public double Price { get; set; }
         public int Quantity { get; set; }
-        public double TotalPrice { get; set; }        
+        public double TotalPrice { get; set; }
         public MeasurementType MeasurementType { get; set; }
 
-        public OrderStatus OrderStatus  { get; set; }
+        public OrderStatus OrderStatus { get; set; }
+        public string ClientSecret { get; set; }
+        public string PaymentIntentId { get; set; }
     }
 }

@@ -22,12 +22,14 @@ namespace Infrastructure.Data
         public DbSet<ProductType> ProductTypes { get; set; }
 
         public DbSet<MetalType> MetalTypes { get; set; }
+        //public DbSet<AlternativeMetal> AlternativeMetals { get; set; }
         public DbSet<PlanType> PlanTypes { get; set; }
 
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Plan> Plans { get; set; }
 
         public DbSet<PlanInvitation> PlanInvitations { get; set; }
+        public DbSet<InvitationInteraction> InvitationInteractions { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

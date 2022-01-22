@@ -6,17 +6,16 @@ namespace Core.Entities
     public class PlanInvitation : BaseEntity
     {
         public string Inviter { get; set; }
-        public string Invitee { get; set; }
         public string Token { get; set; }
-        public string Email { get; set; }
+        public string ToEmail { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime Expiration { get; set; }
         public int PlanId { get; set; }
-        public InvitationStatus Status { get; set; } 
+        public InvitationStatus Status { get; set; }
 
     }
 
-    public enum InvitationStatus 
+    public enum InvitationStatus
     {
         [EnumMember(Value = "None")]
         None,

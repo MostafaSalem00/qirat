@@ -1,3 +1,5 @@
+import { IAttachment } from "./attachment";
+
 export interface IMember {
     id: string;
     userName: string;
@@ -21,9 +23,10 @@ export interface IMember {
     occupation: string;
     otherPhoneNumber: string;
     isAmerican: boolean;
-    attachment: string[],
+    attachment: IAttachment[],
     residentAddress: string;
     mailingAddress: string;
     acceptPolicy: boolean;
     accepted: boolean;
 }
+

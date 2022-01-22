@@ -1,90 +1,79 @@
 <div class="d-flex justify-content-center mt-4">
-    <div class="col-8 greyBack">
+  <div class="col-8 greyBack">
     <form class="needs-validation" novalidate="" [formGroup]="planForm" (ngSubmit)="onSubmit()">
 
       <div class="form-row">
         <div class="col-md-6 mb-3">
-            <label for="validationTooltip04">Select Your Plan </label>
-            <select class="custom-select" (change)="changePlanType($event.target)" formControlName="planTypeId" >
-              <option  disabled value="">Please select .... </option>
-              <option id="planTypeId" *ngFor="let item of planTypes" value="{{item?.id}}">{{item.name}}</option>
-            </select>
-            <!-- <div class="invalid-feedback" *ngIf="planForm.invalid && planForm.get('metalTypeId').errors">
+          <label for="validationTooltip04">Select Your Plan </label>
+          <select class="custom-select" (change)="changePlanType($event.target)" formControlName="planTypeId">
+            <option disabled value="">Please select .... </option>
+            <option id="planTypeId" *ngFor="let item of planTypes" value="{{item?.id}}">{{item.name}}</option>
+          </select>
+          <!-- <div class="invalid-feedback" *ngIf="planForm.invalid && planForm.get('metalTypeId').errors">
               <div *ngIf="planForm.get('metalTypeId').errors.required">
                 Access Name is required
               </div>
             </div> -->
-            <div class="alert alert-primary mt-2" role="alert" *ngIf="this.planForm.get('planTypeId').value ==1">
-              {{planTypes[0].hint}}
-            </div>
-            <div class="alert alert-primary mt-2" role="alert" *ngIf="this.planForm.get('planTypeId').value==2">
-              {{planTypes[1].hint}}
-            </div>
+          <div class="alert alert-primary mt-2" role="alert" *ngIf="this.planForm.get('planTypeId').value ==1">
+            {{planTypes[0].hint}}
           </div>
-        
+          <div class="alert alert-primary mt-2" role="alert" *ngIf="this.planForm.get('planTypeId').value==2">
+            {{planTypes[1].hint}}
+          </div>
+        </div>
+
       </div>
 
       <div class="form-row">
         <div class="col-md-6 mb-3">
-            <label for="validationTooltip04">Select Metal Type </label>
-            <select class="custom-select" (change)="changeMetalType($event.target)" formControlName="metalTypeId">
-              <option value="" disabled>Please select ... </option>
-              <option id="metalTypeId" *ngFor="let item of dd" value="{{item?.Index}}">{{item.Title}}</option>
-            </select>
-            <div class="invalid-tooltip">
-              Please select a valid state.
-            </div>
+          <label for="validationTooltip04">Select Metal Type </label>
+          <select class="custom-select" (change)="changeMetalType($event.target)" formControlName="metalTypeId">
+            <option value="" disabled>Please select ... </option>
+            <option id="metalTypeId" *ngFor="let item of metalTypes" value="{{item?.alternativeId}}">{{item?.name}}
+            </option>
+          </select>
+          <div class="invalid-tooltip">
+            Please select a valid state.
           </div>
+        </div>
       </div>
-     
+
       <div class="form-row flex-column mb-3">
         <div class="col-md-6  ">
-            
-            <label  for="validationTooltip04">Select Amount </label>
-            
-            <div class="invalid-tooltip">
-              Please select a valid state.
-            </div>
-            <div class="custom-control custom-radio custom-control-inline">
-              <label class="radio-inline">
-                <input type="radio" [value]="'Ounce'" formControlName="measurementType"> Ounce
-              </label>
-              </div>
-              <div class="custom-control custom-radio custom-control-inline">
-                <label class="radio-inline">
-                  <input type="radio" [value]="'Bar'" formControlName="measurementType"> Bar
-                </label>
-              </div>
-          </div> 
-          <div class="col-md-3">
-            <label class="form-label" for="typeNumber">Quantity</label>
-            <input type="number" id="amount" value="0"  formControlName="amount" class="form-control" />
-            
+
+          <label for="validationTooltip04">Select Amount </label>
+
+          <div class="invalid-tooltip">
+            Please select a valid state.
           </div>
-      </div>
-      <div class="form-row">
-        <div class="col-md-6 mb-3">
-            <label for="validationTooltip04">Total Coast :   </label>
-            <input type="number" id="totalPrice"  value="0" [attr.disabled]="true" formControlName="totalPrice" class="form-control" />
+          <div class="custom-control custom-radio custom-control-inline">
+            <label class="radio-inline">
+              <input type="radio" [value]="'Ounce'" formControlName="measurementType"> Ounce
+            </label>
           </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <label class="radio-inline">
+              <input type="radio" [value]="'Bar'" formControlName="measurementType"> Bar
+            </label>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="typeNumber">Quantity</label>
+          <input type="number" id="amount" value="0" formControlName="amount" class="form-control" />
+
+        </div>
       </div>
+
       <div class="form-row">
         <div class="col-md-6">
-        <div class="form-group form-check">
-            <input
-              type="checkbox"
-              formControlName="acceptTerms"
-              class="form-check-input"
-              
-            />
-            <label for="acceptTerms" class="form-check-label"
-              >I have read and agree to the Terms</label
-            >
+          <div class="form-group form-check">
+            <input type="checkbox" formControlName="acceptTerms" class="form-check-input" />
+            <label for="acceptTerms" class="form-check-label">I have read and agree to the Terms</label>
           </div>
         </div>
       </div>
       <!-- <button [disabled]="planForm.invalid" class="btn btn-primary" type="submit">Submit form</button> -->
       <button [disabled]="planForm.invalid" class="btn btn-primary" type="submit">Submit form</button>
     </form>
-    </div>
+  </div>
 </div>

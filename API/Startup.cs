@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,40 +43,57 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ITokenService,TokenService>();
-            services.AddScoped<IUserUtility,UserUtilityRepository>();
-            services.AddScoped<IMetalRepository,MetalRepository>();
-            services.AddScoped<IUnitOfWork,UnitOfWork>();
-            services.AddScoped<IPlanRepository,PlanRepository>();
-            services.AddScoped<IFileStorageService,InAppStorageService>();
-            services.AddScoped<IFileService,FileService>();
+            //services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IMailService, MailService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserUtility, UserUtilityRepository>();
+            services.AddScoped<IMetalRepository, MetalRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IPlanRepository, PlanRepository>();
+            services.AddScoped<IFileStorageService, InAppStorageService>();
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IPaymentService, PaymentService>();
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
-            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<StoreContext>();
+            // services.Configure<RouteOptions>(options =>
+            //     {
+            //     options.LowercaseUrls = true;
+            //     options.LowercaseQueryStrings = true;
+            //     });
+            services.AddIdentity<AppUser, IdentityRole>()
+            .AddEntityFrameworkStores<StoreContext>()
+            .AddDefaultTokenProviders();
 
             services.AddDbContext<StoreContext>(x =>
-                x.UseSqlServer(_config.GetConnectionString("LocalConnection")));            
+                x.UseSqlServer(_config.GetConnectionString("LocalConnection")));
 
-                services.AddAuthentication(x =>
+            // services.AddRouting(options =>
+            // {
+            //     options.LowercaseUrls = true;
+            //     options.LowercaseQueryStrings = false;
+            // });
+
+            services.AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+            .AddJwtBearer(options =>
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(options => 
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"])),
-                        ValidIssuer = _config["Token:Issuer"],
-                        ValidateIssuer = true,
-                        ValidateAudience = false
-                    };
-                });           
-            
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"])),
+                    ValidIssuer = _config["Token:Issuer"],
+                    ValidateIssuer = true,
+                    ValidateAudience = false
+                };
+            });
+
             services.AddCors(opt =>
             {
-                opt.AddPolicy("CorsPolicy", policy => {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
                 });
             });
@@ -89,14 +107,17 @@ namespace API
                 x.JsonSerializerOptions.IgnoreNullValues = true;
             });
 
-            services.Configure<ApiBehaviorOptions>(options => {
-                options.InvalidModelStateResponseFactory = actionContext => {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
                     var errors = actionContext.ModelState
                         .Where(e => e.Value.Errors.Count > 0)
                         .SelectMany(x => x.Value.Errors)
                         .Select(x => x.ErrorMessage).ToArray();
 
-                    var errorResponse = new ApiValidationErrorResponse(){
+                    var errorResponse = new ApiValidationErrorResponse()
+                    {
                         Errors = errors
                     };
                     return new BadRequestObjectResult(errorResponse);
@@ -130,7 +151,8 @@ namespace API
             app.UseRouting();
 
             app.UseCors("CorsPolicy");
-            
+
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 
@@ -138,9 +160,11 @@ namespace API
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json","Qirat API V1");
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Qirat API V1");
             });
+
 
             app.UseEndpoints(endpoints =>
             {

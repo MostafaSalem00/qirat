@@ -15,13 +15,19 @@ namespace Infrastructure.Data
         public MetalRepository(StoreContext context)
         {
             _context = context;
-        }        
+        }
 
         public async Task<Metal> GetMetalAsync()
         {
-             return await _context.Metals
-                 .Include(r => r.Rates).FirstOrDefaultAsync();
+            return await _context.Metals
+                .Include(r => r.Rates).FirstOrDefaultAsync();
             //return null;
+        }
+
+        public async Task<List<MetalType>> GetMetalTypesAsync()
+        {
+            var metaltypes = await _context.MetalTypes.ToListAsync();
+            return metaltypes;
         }
 
         public async Task<List<MetalType>> GetMetalAfterShapping()
@@ -35,12 +41,12 @@ namespace Infrastructure.Data
             // {
             //     props.Add(prop.Name, prop.GetValue(metalsData.Rates, null));
             // }
-            var toExclude = new HashSet<string>() {"Id","XRH", "USD"};
+            var toExclude = new HashSet<string>() { "Id", "XRH", "USD" };
 
             var json = metalsData.Rates.GetType()
                         .GetProperties()
                         .Where(property => !toExclude.Contains(property.Name))
-                        .Select(p => new MetalType { Name= p.Name , Price = Convert.ToDouble(p.GetValue(metalsData.Rates,null)) } )
+                        .Select(p => new MetalType { Name = p.Name })
                         .ToList();
 
             return json;

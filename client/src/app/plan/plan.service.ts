@@ -11,6 +11,7 @@ import { IPlanInfo } from '../shared/models/planInfo';
 import { IUserPlans } from '../shared/models/userPlans';
 import { IPlan } from '../shared/models/plan';
 import { IPlanOrder } from '../shared/models/planOrder';
+import { IPlanSummary } from '../shared/models/planSummary';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,10 @@ export class PlanService {
 
   getMetalListAsync() {
     return this.http.get<IMetalType[]>( this.baseUrl + 'metals/metalshap');
+  }
+
+  getMetalTypesAsync(){
+    return this.http.get<IMetalType[]>( this.baseUrl + 'metals/metalTypes');
   }
 
   getMetalApi() {
@@ -52,6 +57,13 @@ export class PlanService {
   submitNewPlan(values: INewPlan) {
     console.log(values);
     return this.http.post<INewPlan>(this.baseUrl + 'plans/NewPlan' , values);
+  }
+
+  getPlanSummaryById(id){
+    console.log(id);
+    return this.http.get<IPlanSummary>(this.baseUrl + 'plans/PlanSummary/' + id);
+    // console.log(data);
+    // return data;
   }
 
   submitOrderPlan(values: INewPlan){

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import {  interval, Observable, ReplaySubject, Subscription, timer} from 'rxjs';
+import {  BehaviorSubject, interval, Observable, ReplaySubject, Subscription, timer} from 'rxjs';
 import { filter, first, map, switchMap } from 'rxjs/operators';
 import { IMetal } from '../../shared/models/metal';
 import { MetalEnum } from '../models/metalenum';
@@ -19,14 +19,29 @@ export class MetalApiService  {
   private curentMetalList = new ReplaySubject<any[]>(1);
   currentMetalList$ = this.curentMetalList.asObservable();
 
+  private basketMetalSource = new BehaviorSubject<any>(null);
+  basketMetal$ = this.basketMetalSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
   
+ 
+
   fetchMetalEveryXSecond(){
     
     this.subscription = timer(0, 300000).pipe(
       switchMap(() => this.callMetalApi())
+    ).subscribe((result: IMetal) => {
+      this.actualMetalSource.next(result);
+      this.shapMetalToList(result.rates);
+      console.log(result);
+    });
+  }
+
+  fetchMetalEveryXSecondAndWait(){
+    
+    this.subscription = timer(0, 300000).pipe(
+      switchMap(() => this.callMetalApi().toPromise())
     ).subscribe((result: IMetal) => {
       this.actualMetalSource.next(result);
       this.shapMetalToList(result.rates);
@@ -50,8 +65,8 @@ export class MetalApiService  {
       
       Object.entries(MetalEnum).map(function(key2) {
         if(key2[0] == key[0]){
-          console.log(key);
-          console.log(key2);
+          // console.log(key);
+          // console.log(key2);
           obj.push({'Index': index, 'Name' : key[0] , 'Value' : key[1], 'Title' : key2[1]});
         }
       });
@@ -59,6 +74,14 @@ export class MetalApiService  {
     });
     console.log(obj);
       this.curentMetalList.next(obj);
+  }
+
+  private calculateTotals() {
+    // const basket = this.getCurrentBasketValue();
+    // const shipping = this.shipping;
+    // const subtotal = basket.items.reduce((a, b) => (b.price * b.quantity) + a, 0);
+    // const total = subtotal + shipping;
+    // this.basketMetalSource.next({shipping, total, subtotal});
   }
 
   hasValue(value: any) {

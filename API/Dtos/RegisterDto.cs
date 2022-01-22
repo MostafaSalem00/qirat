@@ -20,10 +20,12 @@ namespace API.Dtos
         public string OtherPhoneNumber { get; set; }
         public bool IsAmerican { get; set; }
         public string SSN { get; set; }
-        
+
         public List<IFormFile> Files { get; set; }
         public string ResidentAddress { get; set; }
         public string MailingAddress { get; set; }
         public bool AcceptPolicy { get; set; }
+
+        public string ClientURI { get; set; }
     }
 }

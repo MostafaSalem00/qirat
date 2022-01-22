@@ -13,9 +13,11 @@ namespace Infrastructure.Data.Services
     public class FileService : IFileService
     {
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public FileService(IHostingEnvironment hostingEnvironment)
+        public FileService(IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _hostingEnvironment = hostingEnvironment;
 
         }
@@ -61,49 +63,19 @@ namespace Infrastructure.Data.Services
 
             try
             {
-                // files.ForEach(async file =>
-                // {
-                //     if (file.Length <= 0) return;
-                //     var filePath = Path.Combine(target, file.FileName);
-                //         // using (var stream = new FileStream(filePath, FileMode.Create))  
-                //         // {  
-                //         //     await file.CopyToAsync(stream);  
-                //         // }
-                //         using (var ms = new MemoryStream())
-                //     {
-                //         await file.CopyToAsync(ms);
-                //         var content = ms.ToArray();
-                //         await File.WriteAllBytesAsync(filePath, content);
-                //     }
-
-                //     var routeForDB = filePath.Replace("\\", "/");
-                //     finished = true;
-                //     _returnPaths.Add(routeForDB);
-                // });
-
                 foreach (var file in files)
                 {
-                    // var filePath = Path.Combine(target, file.FileName);
-                    // if (file.Length > 0)
-                    // {
-                    //     using (var stream = new FileStream(filePath, FileMode.Create))
-                    //     {
-                    //         await file.CopyToAsync(stream);
-                    //         var routeForDB = filePath.Replace("\\", "/");
-                    //         finished = true;
-                    //         _returnPaths.Add(routeForDB);
-                    //     }
-                    // }
                     string filename = Guid.NewGuid() + Path.GetExtension(file.FileName);
                     var filePath = Path.Combine(target, filename);
-                    //var path = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "Upload"));
-                    //var path = Path.Combine(target, file.FileName);
+
                     using (var filestream = new FileStream(filePath, FileMode.Create))
                     {
                         await file.CopyToAsync(filestream);
                     }
                     iscopied = true;
-                    var routeForDB = filePath.Replace("\\", "/");
+
+                    var URL = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}";
+                    var routeForDB = Path.Combine(URL, subDirectory, filename).Replace("\\", "/");
                     _returnPaths.Add(routeForDB);
                 }
 

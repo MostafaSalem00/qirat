@@ -1,9 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, of, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { CustomEncoderService } from '../core/services/custom-encoder.service';
 import { IKnowAboutUs } from '../shared/models/IKnowAboutUs';
 import { Role } from '../shared/models/Role';
 import { IUser } from '../shared/models/user';
@@ -27,7 +28,7 @@ export class AccountService {
   loadCurrentUser(token: string) {
     
     if(token == null){
-      console.log(token);
+      //console.log(token);
       this.currentUserSource.next(null);
       return of(null);
     }
@@ -39,7 +40,7 @@ export class AccountService {
       map((user: IUser) => {
         
         if(user) {
-          console.log(user);
+          //console.log(user);
           localStorage.setItem('token', user.token);
           this.currentUserSource.next(user);
         }
@@ -65,7 +66,7 @@ export class AccountService {
     return this.currentUser$.pipe(
       
       map(auth => {
-        console.log(auth);
+        //console.log(auth);
         if(auth){
           const roleArray = auth.role.map(value => value.toLowerCase());
           //console.log(roleArray);
@@ -103,7 +104,14 @@ export class AccountService {
     );
   }
 
-
+  confirmEmail(token: string, email: string){
+    // let params = new HttpParams({ encoder: new CustomEncoderService() })
+    let params = new HttpParams()
+    params = params.append('token', token);
+    params = params.append('email', email);
+    
+    return this.http.get(this.baseUrl + 'account/emailconfirmation', { params: params } );
+  }
 
   logout() {
     localStorage.removeItem('token');

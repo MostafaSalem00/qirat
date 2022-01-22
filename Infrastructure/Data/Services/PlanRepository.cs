@@ -17,7 +17,7 @@ namespace Infrastructure.Data.Services
 
         }
 
-        public async Task<Plan> CreteOrderPlanAsync(int planId, Metal metal, string buyerId, string creatorId, int planTypeId, int metalTypeId, string metalTypeName, double price, string measurementType, int amount, double totalPrice, bool acceptTerms, string status)
+        public async Task<Plan> CreteOrderPlanAsync(int planId, string buyerId, string creatorId, int planTypeId, int metalTypeId, string metalTypeName, double price, string measurementType, int amount, bool acceptTerms, string status)
         {
             MeasurementType mymeasurementType;
             Enum.TryParse(measurementType, out mymeasurementType);
@@ -27,26 +27,21 @@ namespace Infrastructure.Data.Services
             if (plan == null)
                 return null;
 
-            var orderItem = new OrderItem(metal, metalTypeId, metalTypeName, price, amount, totalPrice, mymeasurementType, OrderStatus.Pending);
+            var orderItem = new OrderItem(metalTypeId, metalTypeName, price, amount, 0, mymeasurementType, OrderStatus.Pending);
 
             plan.OrderItems.Add(orderItem);
 
             return plan;
         }
 
-        public async Task<Plan> GetOrderPlanById(int id)
-        {
-            var plan = await _context.Plans.Include(p => p.OrderItems).FirstOrDefaultAsync(p => p.Id == id);
-            return plan;
-        }
 
-        public async Task<Plan> CreateNewPlanAsync(Metal metal, string buyerId, string creatorId, int planTypeId, int metalTypeId, string metalTypeName, double price, string measurementType, int amount, double totalPrice, bool acceptTerms, string status)
+        public async Task<Plan> CreateNewPlanAsync(string buyerId, string creatorId, int planTypeId, int metalTypeId, string metalTypeName, double price, string measurementType, int amount, bool acceptTerms, string status)
         {
             MeasurementType mymeasurementType;
             Enum.TryParse(measurementType, out mymeasurementType);
 
             var items = new List<OrderItem>();
-            var orderItem = new OrderItem(metal, metalTypeId, metalTypeName, price, amount, totalPrice, mymeasurementType, OrderStatus.Pending);
+            var orderItem = new OrderItem(metalTypeId, metalTypeName, 0, amount, 0, mymeasurementType, OrderStatus.Pending);
             items.Add(orderItem);
 
             var plan = new Plan(items, buyerId, creatorId, planTypeId, acceptTerms, PlanStatus.Pending);
@@ -54,6 +49,29 @@ namespace Infrastructure.Data.Services
             await _context.Plans.AddAsync(plan);
             return plan;
         }
+
+        public async Task<OrderItem> GetOrderItemByIdAsync(int id)
+        {
+            return await _context.OrderItems.FirstOrDefaultAsync(o => o.Id == id);
+        }
+
+        public async Task<OrderItem> UpdateOrderPlanAsync(OrderItem currentOrder)
+        {
+
+            //var order = await _context.OrderItems.Where(o => o.Id == currentOrder.Id).FirstOrDefaultAsync();
+            _context.OrderItems.Attach(currentOrder);
+            _context.Entry(currentOrder).State = EntityState.Modified;
+
+            return currentOrder;
+        }
+
+
+        public async Task<Plan> GetSummaryPlanById(int id)
+        {
+            var plan = await _context.Plans.Include(p => p.PlanType).Include(p => p.OrderItems).FirstOrDefaultAsync(p => p.Id == id);
+            return plan;
+        }
+
         public async Task<List<PlanType>> GetPlanTypeListAsync()
         {
             return await _context.PlanTypes.ToListAsync();
@@ -67,7 +85,7 @@ namespace Infrastructure.Data.Services
 
         public async Task<Plan> GetPlanByIdAsync(int id)
         {
-            var plan = await _context.Plans.Include(p => p.PlanType).Include(p => p.OrderItems).ThenInclude(o => o.Metal).ThenInclude(m => m.Rates).FirstOrDefaultAsync(p => p.Id == id);
+            var plan = await _context.Plans.Include(p => p.PlanType).Include(p => p.OrderItems).FirstOrDefaultAsync(p => p.Id == id);
 
             // check if users already had any plan 
             if (plan == null)
@@ -90,8 +108,8 @@ namespace Infrastructure.Data.Services
                     var _highestOrder = plan.OrderItems.Where((o) => o.Quantity == plan.OrderItems.Max(y => y.Quantity)).FirstOrDefault();
                     orders.Add(new OrderItem
                     {
-                        MetalId = _highestOrder.MetalId,
-                        Metal = _highestOrder.Metal,
+                        // MetalId = _highestOrder.MetalId,
+                        // Metal = _highestOrder.Metal,
                         MetalTypeId = _highestOrder.MetalTypeId,
                         MetalTypeName = _highestOrder.MetalTypeName,
                         Price = _highestOrder.Price,
@@ -124,5 +142,7 @@ namespace Infrastructure.Data.Services
             // }
             return planInvitations;
         }
+
+
     }
 }

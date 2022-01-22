@@ -1,13 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Lightbox } from 'ngx-lightbox';
 import { toBase64 } from '../../utilities/utils';
+// declare var require: any
 
 @Component({
   selector: 'app-input-image',
   templateUrl: './input-image.component.html',
   styleUrls: ['./input-image.component.css']
 })
-export class InputImageComponent implements OnInit {
+export class InputImageComponent implements OnInit , OnChanges  {
 
   urls = new Array<string>();
   imageFiles = new Array<File>();
@@ -15,13 +17,27 @@ export class InputImageComponent implements OnInit {
   selectedFiles?: File[];
 
   @Input() urlCurrentImages : string[];
+  @Input() albumUrl : any[];
 
   @Output() onImagesSelected = new EventEmitter<File[]>();
   // @Output() onImagesSelected = new EventEmitter;
-  constructor(private _lightbox: Lightbox) { }
-
+  constructor(private _lightbox: Lightbox,public sanitizer: DomSanitizer) { }
+  
   ngOnInit(): void {
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    for (let property in changes) {
+      if (property === 'albumUrl') {
+        this.album = changes[property].currentValue;
+      } 
+    }
+  }
+
+
+  // sanitizeImageUrl(imageUrl: string) {
+  //   return require(imageUrl);
+  // }
 
 
   change(event){

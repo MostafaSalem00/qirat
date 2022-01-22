@@ -4,6 +4,7 @@ import { LoginComponent } from './admin/login/login.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { HomeComponent } from './home/home.component';
+import { LandingComponent } from './landing/landing.component';
 import { MyPlansComponent } from './plan/my-plans/my-plans.component';
 import { PlanDetailsComponent } from './plan/plan-details/plan-details.component';
 import { PlanOrderComponent } from './plan/plan-order/plan-order.component';
@@ -14,6 +15,7 @@ import { ShopComponent } from './shop/shop.component';
 
 const routes: Routes = [
   {path: '' , component: HomeComponent },
+  {path: 'landing' , component: LandingComponent },
   {path: 'shop' , component: ShopComponent  },
   {
     path: 'admin' , 
@@ -28,6 +30,11 @@ const routes: Routes = [
   { path: 'plan-details/:id',   component: PlanDetailsComponent , data: {breadcrumb: 'Details'} },
   { path: 'plan-order/:id', component: PlanOrderComponent , data: {breadcrumb: 'Plan Order'}},
   { path: 'plan-summary/:id', component: PlanSummaryComponent , data: {breadcrumb: 'Order Summary'}},
+  {
+    path: 'checkout',
+    loadChildren: () => import('./checkout/checkout.module').then((m) => m.CheckoutModule),
+    data: { breadcrumb: 'Checkout' },
+  },
   { path: '**' , redirectTo: '' , pathMatch:'full' }
 ];
 

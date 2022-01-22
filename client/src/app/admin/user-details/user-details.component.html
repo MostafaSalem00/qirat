@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-center mt-4">
   <div class="col-6">
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="form-signin" style="margin: 20px;">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit($event)" class="form-signin" style="margin: 20px;">
       <div class="text-center mb-4">
         <h1 class="h3 mb-3 font-weight-normal">Register</h1>
       </div>
@@ -67,7 +67,8 @@
       </div>
 
       <ng-container *ngIf="userForm.get('isAmerican').value == false">
-        <app-input-image [urlCurrentImages]="userForm.get('attachments').value"></app-input-image>
+        <app-input-image [urlCurrentImages]="attachmentList" [albumUrl]="attachemntSource">
+        </app-input-image>
       </ng-container>
 
       <div class="form-label-group">
@@ -88,7 +89,15 @@
       </div>
 
       <!-- <button [disabled]="registerForm.invalid" class="btn btn-lg btn-primary btn-block" type="submit">Register</button> -->
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Accept</button>
+      <div class="form-row">
+        <div class="col-md-6 mb-3">
+          <button id="submit-accept" class="btn btn-lg btn-primary btn-block" type="submit">Accept</button>
+        </div>
+        <div class="col-md-6 mb-3">
+          <button id="submit-reject" class="btn btn-lg btn-danger btn-block" type="submit">Reject</button>
+        </div>
+
+      </div>
 
     </form>
   </div>

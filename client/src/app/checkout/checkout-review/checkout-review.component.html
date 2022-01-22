@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 py-5 mb-1">
+            <app-order-summary [currentPlan]="currentPlan" [metalName]="passedMetalName"></app-order-summary>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6 offset-6">
+            <app-order-total [subTotal]="passedSubTotal"></app-order-total>
+
+        </div>
+    </div>
+</div>
+
+<div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
+    <!-- <button class="btn btn-outline-primary" routerLink="/basket">
+        <i class="fa fa-angle-left"></i> Back To Basket
+    </button> -->
+    <button class="btn btn-primary" style="margin-left: auto" (click)="createPaymentIntent()" cdkStepperNext>
+        Go To Payment <i class="fa fa-angle-right"></i>
+    </button>
+</div>

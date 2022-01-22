@@ -13,11 +13,11 @@ namespace Infrastructure.Data
 {
     public class StoreContextSeed
     {
-        public static async Task SeedAsync(StoreContext context,  ILoggerFactory loggerFactory)
+        public static async Task SeedAsync(StoreContext context, ILoggerFactory loggerFactory)
         {
             try
             {
-                if(!context.KnowAboutUs.Any())
+                if (!context.KnowAboutUs.Any())
                 {
                     var aboutUsData = File.ReadAllText("../Infrastructure/Data/SeedData/knowaboutus.json");
                     var aboutUs = JsonSerializer.Deserialize<List<KnowAboutUs>>(aboutUsData);
@@ -27,25 +27,15 @@ namespace Infrastructure.Data
                     }
                     await context.SaveChangesAsync();
                 }
-                
-                if(!context.Rates.Any())
-                {
-                    var rateData = File.ReadAllText("../Infrastructure/Data/SeedData/rates.json");
-                    var rates = JsonSerializer.Deserialize<List<Rates>>(rateData);
-                    foreach (var item in rates)
-                    {
-                        await context.Rates.AddAsync(item);
-                    }
-                    await context.SaveChangesAsync();
 
-                }
-                
-                if(!context.Metals.Any())
+                if (!context.MetalTypes.Any())
                 {
-                    var metalData = File.ReadAllText("../Infrastructure/Data/SeedData/metal.json");
-                    var metal = JsonSerializer.Deserialize<Metal>(metalData);
-                    
-                    await context.Metals.AddAsync(metal);
+                    var metalData = File.ReadAllText("../Infrastructure/Data/SeedData/metalType.json");
+                    var metals = JsonSerializer.Deserialize<List<MetalType>>(metalData);
+                    foreach (var item in metals)
+                    {
+                        await context.MetalTypes.AddAsync(item);
+                    }
                     await context.SaveChangesAsync();
 
                 }
@@ -67,7 +57,7 @@ namespace Infrastructure.Data
                     var types = JsonSerializer.Deserialize<List<ProductType>>(typesData);
                     foreach (var item in types)
                     {
-                       await context.ProductTypes.AddAsync(item);
+                        await context.ProductTypes.AddAsync(item);
                     }
                     await context.SaveChangesAsync();
                 }
@@ -94,7 +84,7 @@ namespace Infrastructure.Data
                     await context.SaveChangesAsync();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var logger = loggerFactory.CreateLogger<StoreContextSeed>();
                 logger.LogError(ex.Message);

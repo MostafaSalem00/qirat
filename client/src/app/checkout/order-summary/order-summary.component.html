@@ -1,0 +1,37 @@
+<div class="mt-4 table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="border-0" scope="col" [class.bg-light]="isBasket">
+                    <div class="p-2 d-flex align-items-center">Plan Id</div>
+                </th>
+                <th scope="col" class="border-0" [class.bg-light]="isBasket">
+                    <div class="py-2  d-flex align-items-center">Plan Type</div>
+                </th>
+                <th scope="col" class="border-0" [class.bg-light]="isBasket">
+                    <div class="py-2  d-flex align-items-center">Order Number</div>
+                </th>
+                <th scope="col" class="border-0" [class.bg-light]="isBasket">
+                    <div class="py-2  d-flex align-items-center">Metal Type</div>
+                </th>
+                <th scope="col" class="border-0" [class.bg-light]="isBasket">
+                    <div class="py-2  d-flex align-items-center">Quantity</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="align-middle"><strong>{{currentPlan?.id}}</strong></td>
+
+                <td class="align-middle">
+                    <span class="font-weight-bold" style="font-size: 1.5em;">
+                        {{currentPlan?.planType?.name}}
+                    </span>
+                </td>
+                <td class="align-middle"><strong>{{currentPlan?.orderItem?.id}}</strong></td>
+                <td class="align-middle"><strong>{{currentPlan?.orderItem?.metalTypeName}}</strong></td>
+                <td class="align-middle"><strong>{{currentPlan?.orderItem?.quantity}}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -2,16 +2,13 @@
 
 namespace Infrastructure.Data.Migrations
 {
-    public partial class UpdatesAtPlanAndOrderItem : Migration
+    public partial class UpdateOrderItemAndMetalTypeModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_OrderItems_Metals_MetalId",
                 table: "OrderItems");
-
-            migrationBuilder.DropTable(
-                name: "MetalTypes");
 
             migrationBuilder.DropIndex(
                 name: "IX_OrderItems_MetalId",
@@ -21,30 +18,28 @@ namespace Infrastructure.Data.Migrations
                 name: "MetalId",
                 table: "OrderItems");
 
+            migrationBuilder.DropColumn(
+                name: "Price",
+                table: "MetalTypes");
+
+            migrationBuilder.AddColumn<int>(
+                name: "AlternativeId",
+                table: "MetalTypes",
+                nullable: false,
+                defaultValue: 0);
+
             migrationBuilder.AddColumn<int>(
                 name: "OrderItemId",
                 table: "Metals",
                 nullable: false,
                 defaultValue: 0);
-
-            migrationBuilder.CreateTable(
-                name: "AlternativeMetals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AlternativeMetals", x => x.Id);
-                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AlternativeMetals");
+            migrationBuilder.DropColumn(
+                name: "AlternativeId",
+                table: "MetalTypes");
 
             migrationBuilder.DropColumn(
                 name: "OrderItemId",
@@ -57,19 +52,12 @@ namespace Infrastructure.Data.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.CreateTable(
-                name: "MetalTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MetalTypes", x => x.Id);
-                });
+            migrationBuilder.AddColumn<double>(
+                name: "Price",
+                table: "MetalTypes",
+                type: "float",
+                nullable: false,
+                defaultValue: 0.0);
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_MetalId",

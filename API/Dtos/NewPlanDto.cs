@@ -17,7 +17,7 @@ namespace API.Dtos
 
         public string MetalTypeName { get; set; }
 
-        public double MetalPrice { get; set; }
+        // public double MetalPrice { get; set; }
 
         public string MeasurementType { get; set; }
 
@@ -27,8 +27,8 @@ namespace API.Dtos
 
         public string Status { get; set; }
 
-        public double TotalPrice { get; set; }        
+        // public double TotalPrice { get; set; }        
 
-        public Metal Metals { get; set; }
+        // public Metal Metals { get; set; }
     }
 }
